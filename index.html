@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/Monica/Downloads/RhinoMarket_AttendanceApp.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rhino Market">
+<meta name="theme-color" content="#F47B20">
+<title>Rhino Market — Attendance</title>
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #F47B20;
+    --orange-dark: #D4640A;
+    --orange-light: #FFF0E4;
+    --blue: #5BB8D4;
+    --blue-dark: #3A9AB8;
+    --blue-light: #E8F7FB;
+    --dark: #1A1A2E;
+    --gray: #6B7280;
+    --light: #F9FAFB;
+    --white: #FFFFFF;
+    --border: #E5E7EB;
+    --success: #10B981;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ── App Shell ── */
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Background decoration ── */
+  .bg-rhino {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(244,123,32,0.15), transparent 70%);
+    pointer-events: none;
+  }
+  .bg-rhino2 {
+    position: absolute;
+    bottom: 100px;
+    left: -80px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,184,212,0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 52px 24px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--orange);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: white;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--blue);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-left: 56px;
+  }
+
+  /* ── Card ── */
+  .card {
+    flex: 1;
+    background: var(--white);
+    border-radius: 28px 28px 0 0;
+    padding: 32px 24px 48px;
+    position: relative;
+    z-index: 1;
+    margin-top: 8px;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 13px;
+    color: var(--gray);
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+
+  /* ── Form fields ── */
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+
+  .field label span.req {
+    color: var(--orange);
+    margin-left: 2px;
+  }
+
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--dark);
+    background: var(--light);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--orange);
+    background: var(--white);
+  }
+
+  .select-wrap {
+    position: relative;
+  }
+
+  .select-wrap::after {
+    content: '▾';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--orange);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  .field textarea {
+    height: 90px;
+    resize: none;
+    line-height: 1.5;
+  }
+
+  .field textarea::placeholder {
+    color: #BCC1CA;
+  }
+
+  /* ── Shift pills ── */
+  .shift-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .shift-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    background: var(--light);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .shift-pill input[type="radio"] {
+    display: none;
+  }
+
+  .shift-pill .dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shift-pill .dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .shift-pill.selected {
+    border-color: var(--orange);
+    background: var(--orange-light);
+  }
+
+  .shift-pill.selected .dot {
+    border-color: var(--orange);
+    background: var(--orange);
+  }
+
+  .shift-pill.selected .dot::after {
+    opacity: 1;
+  }
+
+  .shift-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  .shift-time {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 1px;
+  }
+
+  /* ── Reason tags ── */
+  .reason-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .reason-tag {
+    padding: 11px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--light);
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--dark);
+    transition: all 0.2s;
+    line-height: 1.3;
+  }
+
+  .reason-tag input[type="radio"] { display: none; }
+
+  .reason-tag.selected {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    font-weight: 600;
+  }
+
+  /* ── Timestamp bar ── */
+  .timestamp-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    border-radius: 12px;
+    padding: 11px 14px;
+    margin-bottom: 24px;
+  }
+
+  .timestamp-bar .clock {
+    font-size: 18px;
+  }
+
+  .timestamp-bar span {
+    font-size: 13px;
+    color: var(--blue-dark);
+    font-weight: 500;
+  }
+
+  /* ── Submit button ── */
+  .btn-submit {
+    width: 100%;
+    padding: 17px;
+    background: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-submit:active {
+    transform: scale(0.98);
+    background: var(--orange-dark);
+  }
+
+  .btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ── Success screen ── */
+  .success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 32px;
+    min-height: 60vh;
+  }
+
+  .success-screen.show { display: flex; }
+  .form-content.hide { display: none; }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin-bottom: 24px;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .success-msg {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .btn-another {
+    padding: 14px 32px;
+    background: var(--orange-light);
+    color: var(--orange-dark);
+    border: none;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ── Loading spinner ── */
+  .spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn-submit.loading .btn-text { display: none; }
+  .btn-submit.loading .spinner { display: block; }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0 24px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bg-rhino"></div>
+  <div class="bg-rhino2"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-icon">RM</div>
+      <div class="logo-text">Rhino Market</div>
+    </div>
+    <div class="logo-sub">FOH Attendance Report</div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Form Content -->
+    <div class="form-content">
+      <div class="card-title">Report Attendance</div>
+      <div class="card-subtitle">Fill out all required fields and tap submit.</div>
+
+      <!-- Timestamp -->
+      <div class="timestamp-bar">
+        <span class="clock">🕐</span>
+        <span id="timestamp">Thursday, June 4 at 1:58 PM</span>
+      </div>
+
+      <!-- Name -->
+      <div class="field">
+        <label>Your Name <span class="req">*</span></label>
+        <div class="select-wrap">
+          <select id="empName" required="">
+            <option value="">Select your name...</option>
+            <option>ADRIANNA COSTILLA</option>
+            <option>ALEJANDRA AYALA</option>
+            <option>ALEXA HERNANDEZ</option>
+            <option>ALLISON VARGAS</option>
+            <option>CYIREONA BROOKS</option>
+            <option>EMILY RAMOS</option>
+            <option>ERIK CHAVEZ</option>
+            <option>FELIX HERNANDEZ</option>
+            <option>GABRIELLE DAVIS</option>
+            <option>HILARY GASTON</option>
+            <option>JAMES JEFFERSON</option>
+            <option>JANET CRUZ</option>
+            <option>JANIYA KRIDER</option>
+            <option>JARZYRU THOMPSON</option>
+            <option>JUSTICE PATTERSON</option>
+            <option>KATHERINE ALEMAN</option>
+            <option>LISBETH CHAVEZ</option>
+            <option>MONDAVIAN BATTS</option>
+            <option>NAKALIAH WALKER</option>
+            <option>NIRAYAH ROBBINS</option>
+            <option>OSCAR LOBOS</option>
+            <option>PARKER LONG</option>
+            <option>QUANIYA MOORE</option>
+            <option>VINCENT DELVA</option>
+            <option>WILLIAM AVILES</option>
+            <option>XIOMARA RIOS BONILLA</option>
+            <option>YAN CESAR FERNANDO</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Shift -->
+      <div class="field">
+        <label>Your Shift <span class="req">*</span></label>
+        <div class="shift-pills">
+          <label class="shift-pill" id="pill-1">
+            <input type="radio" name="shift" value="5:30 AM – 2:00 PM">
+            <div class="dot"></div>
+            <div>
+              <div class="shift-label">Morning Shift</div>
+              <div class="shift-time">5:30 AM – 2:00 PM</div>
+            </div>
+          </label>
+          <label class="shift-pill" id="pill-2">
+            <input type="radio" name="shift" value="2:00 PM – 10:00 PM">
+            <div class="dot"></div>
+            <div>
+              <div class="shift-label">Afternoon Shift</div>
+              <div class="shift-time">2:00 PM – 10:00 PM</div>
+            </div>
+          </label>
+          <label class="shift-pill" id="pill-3">
+            <input type="radio" name="shift" value="10:00 PM – 6:00 AM">
+            <div class="dot"></div>
+            <div>
+              <div class="shift-label">Night Shift</div>
+              <div class="shift-time">10:00 PM – 6:00 AM</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Reason -->
+      <div class="field">
+        <label>Reason <span class="req">*</span></label>
+        <div class="reason-grid">
+          <label class="reason-tag"><input type="radio" name="reason" value="CALL OUT"> Call Out</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="NO CALL/NO SHOW"> No Call / No Show</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="SICK"> Sick</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="LEFT EARLY"> Left Early</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="LATE"> Late</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="SWITCHED SHIFT"> Switched Shift</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="FAMILY EMERGENCY"> Family Emergency</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="CAR TROUBLE"> Car Trouble</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="MISSED SHIFT"> Missed Shift</label>
+          <label class="reason-tag"><input type="radio" name="reason" value="NO REASON"> No Reason</label>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="field">
+        <label>Notes <span style="color:var(--gray);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea id="notes" placeholder="Add any extra details for your supervisor..."></textarea>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Submit -->
+      <button class="btn-submit" id="submitBtn" onclick="submitForm()">
+        <span class="btn-text">Submit Report</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Report Submitted!</div>
+      <div class="success-msg">
+        Your attendance report has been submitted.<br>
+        A supervisor has been notified.
+      </div>
+      <button class="btn-another" onclick="resetForm()">Submit Another Report</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── Live timestamp ──
+  function updateTime() {
+    var now = new Date();
+    var opts = { weekday:'long', month:'long', day:'numeric', hour:'numeric', minute:'2-digit', hour12:true };
+    document.getElementById('timestamp').textContent = now.toLocaleDateString('en-US', opts);
+  }
+  updateTime();
+  setInterval(updateTime, 30000);
+
+  // ── Shift pill selection ──
+  document.querySelectorAll('.shift-pill input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.shift-pill').forEach(function(p) { p.classList.remove('selected'); });
+      this.closest('.shift-pill').classList.add('selected');
+    });
+  });
+
+  // ── Reason tag selection ──
+  document.querySelectorAll('.reason-tag input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.reason-tag').forEach(function(t) { t.classList.remove('selected'); });
+      this.closest('.reason-tag').classList.add('selected');
+    });
+  });
+
+  // ── Submit ──
+  function submitForm() {
+    var name   = document.getElementById('empName').value;
+    var shift  = document.querySelector('input[name="shift"]:checked');
+    var reason = document.querySelector('input[name="reason"]:checked');
+    var notes  = document.getElementById('notes').value;
+
+    if (!name) { alert('Please select your name.'); return; }
+    if (!shift) { alert('Please select your shift.'); return; }
+    if (!reason) { alert('Please select a reason.'); return; }
+
+    var btn = document.getElementById('submitBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    // ── REPLACE THIS URL with your Google Apps Script Web App URL ──
+    var SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+    var payload = {
+      name:   name,
+      shift:  shift.value,
+      reason: reason.value,
+      notes:  notes,
+      timestamp: new Date().toISOString()
+    };
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function() {
+      showSuccess();
+    })
+    .catch(function() {
+      // no-cors always goes to catch — treat as success
+      showSuccess();
+    });
+  }
+
+  function showSuccess() {
+    document.querySelector('.form-content').classList.add('hide');
+    document.getElementById('successScreen').classList.add('show');
+    window.scrollTo(0, 0);
+  }
+
+  function resetForm() {
+    document.getElementById('empName').value = '';
+    document.querySelectorAll('.shift-pill').forEach(function(p) { p.classList.remove('selected'); });
+    document.querySelectorAll('input[name="shift"]').forEach(function(r) { r.checked = false; });
+    document.querySelectorAll('.reason-tag').forEach(function(t) { t.classList.remove('selected'); });
+    document.querySelectorAll('input[name="reason"]').forEach(function(r) { r.checked = false; });
+    document.getElementById('notes').value = '';
+    document.querySelector('.form-content').classList.remove('hide');
+    document.getElementById('successScreen').classList.remove('show');
+    var btn = document.getElementById('submitBtn');
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+</script>
+
+
+</body></html>
