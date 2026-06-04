@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///C:/Users/Monica/Downloads/RhinoMarket_AttendanceApp.html -->
+<!-- saved from url=(0070)file:///C:/Users/Monica/Downloads/RhinoMarket_AttendanceApp%20(1).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -461,43 +461,14 @@
       <!-- Timestamp -->
       <div class="timestamp-bar">
         <span class="clock">🕐</span>
-        <span id="timestamp">Thursday, June 4 at 1:58 PM</span>
+        <span id="timestamp">Thursday, June 4 at 2:18 PM</span>
       </div>
 
       <!-- Name -->
       <div class="field">
         <label>Your Name <span class="req">*</span></label>
         <div class="select-wrap">
-          <select id="empName" required="">
-            <option value="">Select your name...</option>
-            <option>ADRIANNA COSTILLA</option>
-            <option>ALEJANDRA AYALA</option>
-            <option>ALEXA HERNANDEZ</option>
-            <option>ALLISON VARGAS</option>
-            <option>CYIREONA BROOKS</option>
-            <option>EMILY RAMOS</option>
-            <option>ERIK CHAVEZ</option>
-            <option>FELIX HERNANDEZ</option>
-            <option>GABRIELLE DAVIS</option>
-            <option>HILARY GASTON</option>
-            <option>JAMES JEFFERSON</option>
-            <option>JANET CRUZ</option>
-            <option>JANIYA KRIDER</option>
-            <option>JARZYRU THOMPSON</option>
-            <option>JUSTICE PATTERSON</option>
-            <option>KATHERINE ALEMAN</option>
-            <option>LISBETH CHAVEZ</option>
-            <option>MONDAVIAN BATTS</option>
-            <option>NAKALIAH WALKER</option>
-            <option>NIRAYAH ROBBINS</option>
-            <option>OSCAR LOBOS</option>
-            <option>PARKER LONG</option>
-            <option>QUANIYA MOORE</option>
-            <option>VINCENT DELVA</option>
-            <option>WILLIAM AVILES</option>
-            <option>XIOMARA RIOS BONILLA</option>
-            <option>YAN CESAR FERNANDO</option>
-          </select>
+          <select id="empName" required=""><option value="">Select your name...</option><option value="ALLISON VARGAS">ALLISON VARGAS</option><option value="EMILY RAMOS">EMILY RAMOS</option><option value="FELIX HERNANDEZ">FELIX HERNANDEZ</option><option value="JANET CRUZ">JANET CRUZ</option><option value="JARZYRU THOMPSON">JARZYRU THOMPSON</option><option value="KIMARI FLORES-MORALES">KIMARI FLORES-MORALES</option><option value="LISBETH CHAVEZ">LISBETH CHAVEZ</option><option value="PARKER LONG">PARKER LONG</option><option value="QUANIYA MOORE">QUANIYA MOORE</option><option value="WILLIAM AVILES">WILLIAM AVILES</option><option value="XIOMARA RIOS BONILLA">XIOMARA RIOS BONILLA</option><option value="YAN CESAR FERNANDO">YAN CESAR FERNANDO</option><option value="ZICILALI LOPEZ">ZICILALI LOPEZ</option></select>
         </div>
       </div>
 
@@ -579,6 +550,48 @@
 </div>
 
 <script>
+  // ── Load active employees from Apps Script ──
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8VBl2XrAR5FV3wVSf1byHGf36Lz-nSlM6yoGntrx0SfV32G0dLfG6FVCypYTaqcG2NQ/exec';
+
+  function loadEmployees() {
+    var select = document.getElementById('empName');
+    select.innerHTML = '<option value="">Loading employees...</option>';
+    fetch(SCRIPT_URL + '?action=getEmployees')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        select.innerHTML = '<option value="">Select your name...</option>';
+        if (data.employees && data.employees.length > 0) {
+          data.employees.forEach(function(emp) {
+            var opt = document.createElement('option');
+            opt.value = emp;
+            opt.textContent = emp;
+            select.appendChild(opt);
+          });
+        } else {
+          select.innerHTML = '<option value="">No employees found</option>';
+        }
+      })
+      .catch(function() {
+        // Fallback to hardcoded list if fetch fails
+        var fallback = ["ADRIANNA COSTILLA","ALEJANDRA AYALA","ALEXA HERNANDEZ",
+          "ALLISON VARGAS","CYIREONA BROOKS","EMILY RAMOS","ERIK CHAVEZ",
+          "FELIX HERNANDEZ","GABRIELLE DAVIS","HILARY GASTON","JAMES JEFFERSON",
+          "JANET CRUZ","JANIYA KRIDER","JARZYRU THOMPSON","JUSTICE PATTERSON",
+          "KATHERINE ALEMAN","LISBETH CHAVEZ","NAKALIAH WALKER","NIRAYAH ROBBINS",
+          "OSCAR LOBOS","PARKER LONG","QUANIYA MOORE","VINCENT DELVA",
+          "WILLIAM AVILES","XIOMARA RIOS BONILLA","YAN CESAR FERNANDO"];
+        select.innerHTML = '<option value="">Select your name...</option>';
+        fallback.forEach(function(emp) {
+          var opt = document.createElement('option');
+          opt.value = emp; opt.textContent = emp;
+          select.appendChild(opt);
+        });
+      });
+  }
+
+  // Load employees when page opens
+  loadEmployees();
+
   // ── Live timestamp ──
   function updateTime() {
     var now = new Date();
@@ -620,7 +633,7 @@
     btn.disabled = true;
 
     // ── REPLACE THIS URL with your Google Apps Script Web App URL ──
-    var SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8VBl2XrAR5FV3wVSf1byHGf36Lz-nSlM6yoGntrx0SfV32G0dLfG6FVCypYTaqcG2NQ/exec';
 
     var payload = {
       name:   name,
